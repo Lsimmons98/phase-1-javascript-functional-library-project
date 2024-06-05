@@ -1,66 +1,96 @@
-const myEach = (data, callBack) => {
-  if (typeof data === 'object' && !Array.isArray(data)){
-    const useableData = Object.keys(data).map((key) => [key, data[key]])
-    useableData.forEach(value => callBack(value[1]))
-  } else {
-  data.forEach(value => callBack(value))
+const myEach = (collection, callBack) => {
+  const values = Array.isArray(collection) ? collection : Object.values(collection);
+  for (let i = 0; i < values.length; i++) {
+    callBack(values[i])
   }
-  return data
+  return collection
 }
 
-const myMap = (data ,callBack) => {
-  if (typeof data === 'object' && !Array.isArray(data)){
-  const useableData = Object.keys(data).map((key) => [key, data[key]])
-  return useableData.map(value => callBack(value[1]))
-  } else {
- return data.map(value => callBack(value))
+const myMap = (collection, callBack) => {
+  const newcollection = []
+  const values = Array.isArray(collection) ? collection : Object.values(collection);
+  for (let i = 0; i < values.length; i++) {
+    newcollection.push(callBack(values[i]))
+  }
+  return (newcollection)
+}
+
+const myReduce = (collection, callBack, acc) => {
+  const values = Array.isArray(collection) ? collection : Object.values(collection);
+  if (acc){
+  let total = acc
+    for (let i = 0; i < values.length; i++) {
+        total = total + callBack(0, values[i], collection)
+        console.log(total)
+      }
+      return(total)
+  }else{
+    let total = values[0]
+    const newValues = values.slice(1)
+    total = values[0]
+    for (let i = 0; i < newValues.length; i++) {
+        total = total + callBack(0, newValues[i], collection)
+      }
+      return total
   }
 }
 
-const myReduce = (data, callback, acc) => {
-  const values = Array.isArray(data) ? data : Object.values(data);
-
-  if (acc === undefined) {
-    return values.reduce((acc, value) => callback(acc, value, data));
-  } else {
-    return values.reduce((acc, value) => callback(acc, value, data), acc);
+const myFind = (collection, callBack) => {
+  const values = Array.isArray(collection) ? collection : Object.values(collection);
+  for (let i = 0; i < values.length; i++) {
+    if(callBack(collection[i])){
+      return collection[i]
+    }
   }
-};
-
-const myFind = (data, callBack) => {
-  const values = Array.isArray(data) ? data : Object.values(data);
-  return values.find(callBack)
 }
 
-const myFilter = (data, callBack) => {
-  const values = Array.isArray(data) ? data : Object.values(data);
-  return values.filter(callBack)
+const myFilter = (collection, callBack) => {
+  const newCollection = []
+  const values = Array.isArray(collection) ? collection : Object.values(collection);
+  for (let i = 0; i < values.length; i++) {
+    if(callBack(collection[i])){
+      newCollection.push(collection[i])
+    }
+  }
+  return newCollection
 }
 
-const mySize = (data) => {
-  const values = Array.isArray(data) ? data : Object.values(data);
+const mySize = (collection) => {
+  const values = Array.isArray(collection) ? collection : Object.values(collection);
   return values.length
 }
 
-const myFirst = (data, n) => {
+const myFirst = (collection, n) => {
   if (n === undefined){
-    return data[0]
+    return collection[0]
   }else{
-    return data.slice(0, n)
+    return collection.slice(0, n)
   }
 }
 
-const myLast = (data, n) => {
+const myLast = (collection, n) => {
   if (n === undefined){
-    return data[data.length - 1]
+    return collection[collection.length - 1]
   }else{
-    return data.slice(-n)
+    return collection.slice(-n)
   }
 }
-const myKeys = (dataObject) => {
-  return Object.keys(dataObject)
+const myKeys = (obj) => {
+  const keys = [];
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      keys.push(key);
+    }
+  }
+  return keys;
 }
 
-const myValues = (dataObject) => {
-  return Object.values(dataObject)
+const myValues = (obj) => {
+  const values = [];
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      values.push(obj[key]);
+    }
+  }
+  return values;
 }
